@@ -2,6 +2,23 @@ version: 2.1
 orbs:
   node: circleci/node@1.1.6
 jobs:
+  deploy:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            sudo docker build ./server -t grzechotnik/server
+            sudo docker push grzechotnik/server
+      - run:
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            sudo docker build ./client -t grzechotnik/client
+            sudo docker push grzechotnik/client
+
   build-and-test-client:
     executor:
       name: node/default
@@ -20,22 +37,6 @@ jobs:
           steps:
             - run: cd server && npm install
             - run: cd server && npm test
-  deploy:
-    docker:
-      - image: circleci/buildpack-deps:stretch
-    steps:
-      - checkout
-      - setup_remote-docker
-      - run:
-          command: |
-            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-            sudo docker build ./server -t grzechotnik/server
-            sudo docker push grzechotnik/server
-      - run:
-          command: |
-            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-            sudo docker build ./client -t grzechotnik/client
-            sudo docker push grzechotnik/client
 
 workflows:
     build-and-test:
