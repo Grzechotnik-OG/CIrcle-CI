@@ -20,8 +20,32 @@ jobs:
           steps:
             - run: cd server && npm install
             - run: cd server && npm test
+  deploy:
+    steps:
+      - checkout
+      - run:
+          command: |
+            echo "$PASSWORD" | docker login -u "$NAME" --password-stdin
+            sudo docker build ./server -t grzechotnik/server
+            sudo docker push grzechotnik/server
+      - run:
+          command: |
+            echo "$PASSWORD" | docker login -u "$NAME" --password-stdin
+            sudo docker build ./client -t grzechotnik/client
+            sudo docker push grzechotnik/client
+
 workflows:
     build-and-test:
       jobs:
-        - build-and-test-client
-        - build-and-test-server
+        - build-and-test-client:
+          filters:
+            branches:
+              only: master
+        - build-and-test-server:
+          filters:
+            branches:
+              only: master
+        - deploy:
+            requires:
+              - build-and-test-client
+              - build-and-test-server
