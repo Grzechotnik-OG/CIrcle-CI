@@ -14,7 +14,7 @@ jobs:
   build-and-test-server:
     executor:
       name: node/default
-    steps 
+    steps: 
       - checkout
       - node/with-cache:
           steps:
