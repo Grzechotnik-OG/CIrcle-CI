@@ -9,13 +9,13 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-          command:
-            docker login -u "grzechotnik" -p "123456789"
+          command: |
+            echo "$PASSWORD" | docker login -u "grzechotnik" -password-stdin
             sudo docker build ./server -t grzechotnik/server
             sudo docker push grzechotnik/server
       - run:
-          command:
-            docker login -u "grzechotnik" -p "123456789"
+          command: |
+            echo "$PASSWORD" | docker login -u "grzechotnik" -password-stdin
             sudo docker build ./client -t grzechotnik/client
             sudo docker push grzechotnik/client
 
