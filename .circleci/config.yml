@@ -3,9 +3,9 @@ orbs:
   node: circleci/node@1.1.6
 jobs:
   deploy:
-  machine: true
     docker:
       - image: circleci/buildpack-deps:stretch
+    machine: true
     steps:
       - checkout
       - setup_remote_docker
