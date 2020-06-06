@@ -3,18 +3,21 @@ orbs:
   node: circleci/node@1.1.6
 jobs:
   deploy:
-    machine: true
+    docker:
+      - image: circleci/buildpack-deps:stretch
     steps:
       - checkout
       - setup_remote_docker
       - run:
           command: |
             echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
+            sudo docker-compose up -d
             sudo docker build ./server -t grzechotnik/server:latest
             sudo docker push grzechotnik/server:latest
       - run:
           command: |
             echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
+            sudo docker-compose up -d
             sudo docker build ./client -t grzechotnik/client:latest
             sudo docker push grzechotnik/client:latest
  
