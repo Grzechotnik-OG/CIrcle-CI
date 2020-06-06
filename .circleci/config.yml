@@ -18,7 +18,7 @@ jobs:
             echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
             sudo docker build ./client -t grzechotnik/client
             sudo docker push grzechotnik/client
-
+ 
   build-and-test-client:
     executor:
       name: node/default
