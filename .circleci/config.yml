@@ -11,13 +11,11 @@ jobs:
       - run:
           command: |
             echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
-            sudo service docker start
             sudo docker build ./server -t grzechotnik/server:latest
             sudo docker push grzechotnik/server:latest
       - run:
           command: |
             echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
-            sudo service docker start
             sudo docker build ./client -t grzechotnik/client:latest
             sudo docker push grzechotnik/client:latest
  
