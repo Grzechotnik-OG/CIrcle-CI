@@ -3,8 +3,6 @@ orbs:
   node: circleci/node@1.1.6
 jobs:
   deploy:
-    docker:
-      - image: circleci/buildpack-deps:stretch
     machine: true
     steps:
       - checkout
